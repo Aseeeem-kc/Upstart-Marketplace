@@ -3,23 +3,186 @@
 {% block title %}{{ category.name }}{% endblock %}
 
 {% block content %}
-<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
-    <h1 class="text-3xl font-semibold text-center mb-8">Category: {{ category.name }}</h1>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {% for item in items %}
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                <a href="{% url 'item:detail' item.id %}" class="block">
-                    <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-full h-80 object-contain rounded-t-xl">
-                    <div class="p-4">
-                        <h2 class="text-xl font-semibold">{{ item.name }}</h2>
-                        <p class="text-gray-600 mt-2">Price: {{ item.price }}</p>
-                    </div>
-                </a>
-            </div>
-        {% empty %}
-            <p class="text-center text-gray-500">No products available in this category.</p>
-        {% endfor %}
+<!-- Category Header -->
+<div class="mb-8 p-8 bg-gradient-to-br from-brand-50 to-slate-50 rounded-2xl border border-brand-100">
+    <div class="text-center">
+        <div class="w-20 h-20 bg-brand-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span class="text-3xl text-white">
+                {% if category.name == 'Electronics' %}📱
+                {% elif category.name == 'Fashion' %}👔
+                {% elif category.name == 'Home' %}🏠
+                {% elif category.name == 'Sports' %}⚽
+                {% elif category.name == 'Books' %}📚
+                {% else %}🏪{% endif %}
+            </span>
+        </div>
+        <h1 class="text-3xl font-bold text-slate-800 mb-2">{{ category.name }}</h1>
+        <p class="text-lg text-slate-600">
+            {% if items %}
+                {{ items|length }} product{{ items|length|pluralize }} available
+            {% else %}
+                Browse our {{ category.name|lower }} collection
+            {% endif %}
+        </p>
     </div>
 </div>
+
+<!-- Filter and Sort Bar -->
+<div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 bg-white rounded-xl border border-slate-200">
+    <div class="flex items-center space-x-4">
+        <span class="text-sm font-medium text-slate-700">Sort by:</span>
+        <select class="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+            <option>Newest First</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+            <option>Most Popular</option>
+        </select>
+    </div>
+    <div class="flex items-center space-x-2">
+        <span class="text-sm text-slate-500">View:</span>
+        <button class="p-2 bg-brand-100 text-brand-600 rounded-lg">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+            </svg>
+        </button>
+        <button class="p-2 text-slate-400 hover:text-slate-600 rounded-lg">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<!-- Products Grid -->
+{% if items %}
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    {% for item in items %}
+    <div class="group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden border border-slate-100">
+        <a href="{% url 'item:detail' item.id %}" class="block">
+            <div class="relative h-64 overflow-hidden bg-slate-50">
+                <img src="{{ item.image.url }}" alt="{{ item.name }}" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200">
+                <div class="absolute top-3 right-3">
+                    <button class="w-8 h-8 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-sm transition-colors duration-200">
+                        <svg class="w-4 h-4 text-slate-400 hover:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="p-4">
+                <h3 class="text-lg font-semibold text-slate-900 mb-2 group-hover:text-brand-600 transition-colors truncate">
+                    {{ item.name }}
+                </h3>
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-xl font-bold text-brand-600">
+                        ${{ item.price }}
+                    </p>
+                    <div class="flex items-center space-x-1 text-accent-400 text-sm">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <span>4.8</span>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between text-sm text-slate-500">
+                    <span>Free shipping</span>
+                    <span class="opacity-0 group-hover:opacity-100 text-brand-500 font-medium transition-opacity duration-200">
+                        View Details →
+                    </span>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Load More Button -->
+<div class="text-center mt-12">
+    <button class="px-8 py-3 bg-white text-brand-600 font-semibold border-2 border-brand-200 rounded-xl hover:bg-brand-50 hover:border-brand-300 transition-all duration-200">
+        Load More Products
+    </button>
+</div>
+
+{% else %}
+<!-- Empty State -->
+<div class="text-center py-16">
+    <div class="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+        <svg class="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M9 1L5 3l4 2 4-2-4-2z"></path>
+        </svg>
+    </div>
+    <h3 class="text-xl font-semibold text-slate-800 mb-3">No products available</h3>
+    <p class="text-slate-600 mb-6 max-w-md mx-auto">
+        We don't have any products in the {{ category.name }} category yet. Check back soon or explore other categories.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="{% url 'item:items' %}" class="btn-primary px-6 py-3 text-white font-semibold rounded-xl shadow-md">
+            Browse All Products
+        </a>
+        <a href="{% url 'item:new' %}" class="btn-accent px-6 py-3 text-slate-800 font-semibold rounded-xl shadow-md">
+            Add Product
+        </a>
+    </div>
+</div>
+{% endif %}
+
+<!-- Related Categories -->
+<div class="mt-16 p-8 bg-slate-50 rounded-2xl border border-slate-200">
+    <h3 class="text-xl font-bold text-slate-800 mb-6 text-center">Explore Other Categories</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a href="#" class="group p-4 bg-white rounded-xl border border-slate-200 hover:border-brand-200 hover:bg-brand-50 transition-all duration-200 text-center">
+            <div class="w-12 h-12 bg-brand-100 group-hover:bg-brand-500 rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors duration-200">
+                <span class="text-xl group-hover:text-white">📱</span>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-brand-700">Electronics</span>
+        </a>
+        <a href="#" class="group p-4 bg-white rounded-xl border border-slate-200 hover:border-brand-200 hover:bg-brand-50 transition-all duration-200 text-center">
+            <div class="w-12 h-12 bg-brand-100 group-hover:bg-brand-500 rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors duration-200">
+                <span class="text-xl group-hover:text-white">👔</span>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-brand-700">Fashion</span>
+        </a>
+        <a href="#" class="group p-4 bg-white rounded-xl border border-slate-200 hover:border-brand-200 hover:bg-brand-50 transition-all duration-200 text-center">
+            <div class="w-12 h-12 bg-brand-100 group-hover:bg-brand-500 rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors duration-200">
+                <span class="text-xl group-hover:text-white">🏠</span>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-brand-700">Home</span>
+        </a>
+        <a href="#" class="group p-4 bg-white rounded-xl border border-slate-200 hover:border-brand-200 hover:bg-brand-50 transition-all duration-200 text-center">
+            <div class="w-12 h-12 bg-brand-100 group-hover:bg-brand-500 rounded-lg flex items-center justify-center mx-auto mb-2 transition-colors duration-200">
+                <span class="text-xl group-hover:text-white">⚽</span>
+            </div>
+            <span class="text-sm font-medium text-slate-700 group-hover:text-brand-700">Sports</span>
+        </a>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add wishlist functionality
+    const wishlistButtons = document.querySelectorAll('[data-wishlist]');
+    wishlistButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const icon = this.querySelector('svg');
+            const isLiked = this.classList.contains('liked');
+            
+            if (isLiked) {
+                this.classList.remove('liked');
+                icon.classList.remove('text-red-500');
+                icon.classList.add('text-slate-400');
+            } else {
+                this.classList.add('liked');
+                icon.classList.remove('text-slate-400');
+                icon.classList.add('text-red-500');
+            }
+        });
+    });
+});
+</script>
+
 {% endblock %}

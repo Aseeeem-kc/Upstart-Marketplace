@@ -3,72 +3,229 @@
 {% block title %}Welcome{% endblock %} 
 
 {% block content %}
-{% if user.is_authenticated and recommendations %}
-  <h2 class="text-xl font-semibold mt-6">Recommended for You</h2>
-  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 mt-4">
-    {% for item in recommendations %}
-      <div class="rounded-lg overflow-hidden shadow-md">
-        <a href="{% url 'item:detail' item.id %}">
-          <div class="h-52 w-full">
-            <img src="{{ item.image.url }}" class="object-contain h-full w-full rounded-t-lg">
-          </div>
-          <div class="p-4 bg-white rounded-b-lg">
-            <h2 class="text-lg font-medium">{{ item.name }}</h2>
-            <p class="text-gray-500 text-sm">Price: {{ item.price }}</p>
-          </div>
-        </a>
-      </div>
-    {% endfor %}
-  </div>
-{% endif %}
 
-<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
-    <h2 class="mb-12 text-2xl text-center">Newest items</h2>
-
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
-        {% for item in items %}
-            <div class="rounded-lg overflow-hidden shadow-md">
-                <a href="{% url 'item:detail' item.id %}">
-                    <div class="h-52 w-full">
-                        <img src="{{ item.image.url }}" class="object-contain h-full w-full rounded-t-lg">
-                    </div>
-
-                    <div class="p-4 bg-white rounded-b-lg">
-                        <h2 class="text-lg font-medium">{{ item.name }}</h2>
-                        <p class="text-gray-500 text-sm">Price: {{ item.price }}</p>
-                    </div>
-                </a>
-            </div>
-        {% endfor %}
+<!-- Hero Section -->
+<div class="relative mb-12 p-8 lg:p-12 bg-gradient-to-br from-brand-50 to-brand-100 rounded-2xl border border-brand-200">
+    <div class="text-center">
+        <h1 class="text-4xl lg:text-6xl font-bold mb-6">
+            <span class="brand-text">Welcome to upstart</span>
+        </h1>
+        <p class="text-xl lg:text-2xl text-slate-700 mb-8 max-w-3xl mx-auto">
+            Your trusted marketplace for buying and selling quality products. Connect with our community of reliable buyers and sellers.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'item:items' %}" class="btn-primary px-8 py-4 text-white font-bold rounded-xl shadow-lg">
+                Start Shopping
+            </a>
+            <a href="{% url 'item:new' %}" class="btn-accent px-8 py-4 text-slate-800 font-bold rounded-xl shadow-lg">
+                Start Selling
+            </a>
+        </div>
     </div>
 </div>
 
-<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
-    <h2 class="mb-12 text-2xl text-center">Categories</h2>
-
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
-        {% for category in categories %}
-        <div class="rounded-lg overflow-hidden shadow-md">
-            <a href="{% url 'core:category_view' category.id %}">
-                <div class="p-4 bg-white rounded-lg">
-                    <h2 class="text-lg font-medium">{{ category.name }}</h2>
-                    <p class="text-gray-500 text-sm">{{ category.items.count }} items</p>
+<!-- Recommendations Section -->
+{% if user.is_authenticated and recommendations %}
+<div class="mb-12">
+    <div class="flex items-center justify-between mb-8">
+        <h2 class="text-3xl font-bold text-slate-800">
+            Recommended for You
+        </h2>
+        <div class="flex items-center space-x-2 px-4 py-2 bg-accent-100 rounded-full border border-accent-200">
+            <svg class="w-5 h-5 text-accent-600" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+            </svg>
+            <span class="font-semibold text-accent-700">Personalized</span>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {% for item in recommendations %}
+        <div class="group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden border border-slate-100">
+            <a href="{% url 'item:detail' item.id %}" class="block">
+                <div class="relative h-48 overflow-hidden">
+                    <img src="{{ item.image.url }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200">
+                    <div class="absolute top-3 right-3">
+                        <span class="bg-brand-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                            Recommended
+                        </span>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2 group-hover:text-brand-600 transition-colors truncate">
+                        {{ item.name }}
+                    </h3>
+                    <div class="flex items-center justify-between">
+                        <p class="text-xl font-bold text-brand-600">
+                            ${{ item.price }}
+                        </p>
+                        <div class="flex items-center space-x-1 text-accent-400 text-sm">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <span>4.8</span>
+                        </div>
+                    </div>
                 </div>
             </a>
         </div>
         {% endfor %}
     </div>
 </div>
+{% endif %}
 
-<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl text-center flex flex-col items-center">
-    <div class="flex flex-wrap gap-4 mb-6">
-        {% for item in items %}
-            {% if item.image %}
-                <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-48 h-48 object-cover rounded-lg">
-            {% endif %}
-        {% endfor %}
+<!-- Newest Items Section -->
+<div class="mb-12">
+    <div class="p-8 lg:p-12 bg-slate-50 rounded-2xl border border-slate-200">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-slate-800 mb-4">
+                Newest Arrivals
+            </h2>
+            <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+                Fresh products just added to our marketplace. Be among the first to discover these new listings.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {% for item in items %}
+            <div class="group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden border border-slate-100">
+                <a href="{% url 'item:detail' item.id %}" class="block">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="{{ item.image.url }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200">
+                        <div class="absolute top-3 left-3">
+                            <span class="bg-accent-400 text-slate-800 text-xs font-semibold px-2 py-1 rounded-full">
+                                New
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-slate-900 mb-2 group-hover:text-brand-600 transition-colors truncate">
+                            {{ item.name }}
+                        </h3>
+                        <div class="flex items-center justify-between">
+                            <p class="text-xl font-bold text-brand-600">
+                                ${{ item.price }}
+                            </p>
+                            <span class="opacity-0 group-hover:opacity-100 text-brand-500 text-sm font-medium transition-opacity duration-200">
+                                View Details →
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-    <a href="{% url 'item:gallery' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700 mt-4">View Image Gallery</a>
+</div>
+
+<!-- Categories Section -->
+<div class="mb-12">
+    <div class="p-8 lg:p-12 bg-white rounded-2xl border border-slate-200">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-slate-800 mb-4">
+                Browse Categories
+            </h2>
+            <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+                Explore our organized product categories to find exactly what you're looking for.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {% for category in categories %}
+            <div class="group bg-slate-50 hover:bg-brand-50 rounded-xl p-6 text-center transition-all duration-200 border border-slate-200 hover:border-brand-200">
+                <a href="{% url 'core:category_view' category.id %}" class="block">
+                    <div class="w-16 h-16 bg-brand-500 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:bg-brand-600 transition-colors duration-200">
+                        <span class="text-2xl text-white">
+                            {% if category.name == 'Electronics' %}📱
+                            {% elif category.name == 'Fashion' %}👔
+                            {% elif category.name == 'Home' %}🏠
+                            {% elif category.name == 'Sports' %}⚽
+                            {% elif category.name == 'Books' %}📚
+                            {% else %}🏪{% endif %}
+                        </span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-900 mb-2 group-hover:text-brand-700 transition-colors">
+                        {{ category.name }}
+                    </h3>
+                    <p class="text-slate-500 text-sm">
+                        {{ category.items.count }} items available
+                    </p>
+                    <div class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <span class="inline-flex items-center text-brand-600 text-sm font-medium">
+                            Explore Category →
+                        </span>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Gallery Section -->
+<div class="mb-8">
+    <div class="p-8 lg:p-12 bg-gradient-to-br from-brand-50 to-slate-50 rounded-2xl border border-brand-100">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-slate-800 mb-4">
+                Product Gallery
+            </h2>
+            <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+                Browse through our curated collection of product images from our community.
+            </p>
+        </div>
+
+        <div class="relative">
+            <!-- Image grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+                {% for item in items %}
+                    {% if item.image %}
+                    <div class="group relative aspect-square overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-all duration-200">
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+                        <div class="absolute bottom-2 left-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                            <p class="text-white font-medium text-sm truncate">{{ item.name }}</p>
+                            <p class="text-accent-300 font-semibold text-xs">${{ item.price }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+            <!-- Gallery button -->
+            <div class="text-center">
+                <a href="{% url 'item:gallery' %}" class="btn-primary inline-flex items-center px-8 py-4 text-white font-semibold text-lg rounded-xl shadow-lg">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    View Complete Gallery
+                    <svg class="w-4 h-4 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="text-center p-8 bg-white rounded-2xl border border-slate-200">
+    <h3 class="text-2xl font-bold text-slate-800 mb-4">
+        Ready to join our marketplace?
+    </h3>
+    <p class="text-slate-600 mb-6 max-w-md mx-auto">
+        Whether you're looking to buy quality items or sell your products, upstart provides a trusted platform for your needs.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        {% if not user.is_authenticated %}
+        <a href="{% url 'core:signup' %}" class="btn-primary px-6 py-3 text-white font-semibold rounded-xl shadow-lg">
+            Get Started
+        </a>
+        {% endif %}
+        <a href="{% url 'core:contact' %}" class="px-6 py-3 text-slate-600 font-semibold border border-slate-300 rounded-xl hover:bg-slate-50 transition-colors duration-200">
+            Contact Us
+        </a>
+    </div>
 </div>
 
 {% endblock %}

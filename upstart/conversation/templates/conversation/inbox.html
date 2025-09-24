@@ -3,26 +3,39 @@
 {% block title %}Inbox{% endblock %}
 
 {% block content %}
-<h1 class="mb-6 text-3xl">Inbox</h1>
+<div class="max-w-6xl mx-auto space-y-8 animate-fade-in">
+    <h1 class="mb-6 text-4xl font-bold brand-text text-center">Inbox</h1>
 
-<div class="space-y-6">
-    {% for conversation in conversations %}
-        <a href="{% url 'conversation:detail' conversation.id %}">
-            <div class="p-6 flex bg-gray-100 rounded-xl">
-                <div class="pr-6">
-                    <img src="{{ conversation.item.image.url }}" class="w-20 rounded-xl">
-                </div>
+    <div class="space-y-4">
+        {% for conversation in conversations %}
+            <a href="{% url 'conversation:detail' conversation.id %}" class="block">
+                <div class="glass-subtle p-6 flex items-center gap-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all">
+                    
+                    <!-- Conversation Image -->
+                    <div class="flex-shrink-0">
+                        <img src="{{ conversation.item.image.url }}" alt="{{ conversation.item.name }}"
+                             class="w-24 h-24 object-cover rounded-xl border border-brand-200 shadow-md">
+                    </div>
 
-                <div>
-                    {% for member in conversation.members.all %}
-                        {% if member != request.user %}
-                            <p class="mb-4"><strong>{{ member.username }}</strong> | {{ conversation.modified_at }}</p>
-                            <p>{{ conversation.item.name }}</p>
-                        {% endif %}
-                    {% endfor %}
+                    <!-- Conversation Details -->
+                    <div class="flex flex-col justify-between">
+                        {% for member in conversation.members.all %}
+                            {% if member != request.user %}
+                                <p class="text-lg font-semibold text-brand-600">
+                                    {{ member.username }}
+                                </p>
+                                <p class="text-sm text-slate-500">{{ conversation.modified_at|date:"M d, Y H:i" }}</p>
+                            {% endif %}
+                        {% endfor %}
+                        <p class="mt-2 text-lg font-medium">{{ conversation.item.name }}</p>
+                    </div>
                 </div>
-            </div>
-        </a>
-    {% endfor %}
+            </a>
+        {% endfor %}
+    </div>
+
+    {% if not conversations %}
+        <p class="text-center text-slate-500 text-lg">No conversations yet.</p>
+    {% endif %}
 </div>
 {% endblock %}

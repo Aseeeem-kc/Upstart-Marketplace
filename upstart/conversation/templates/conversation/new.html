@@ -1,27 +1,44 @@
 {% extends 'core/base.html' %}
 
-{% block title %}New conversation{% endblock %}
+{% block title %}New Conversation{% endblock %}
 
 {% block content %}
-<h1 class="mb-6 text-3xl">New conversation</h1>
+<div class="max-w-3xl mx-auto glass-subtle p-8 rounded-2xl shadow-lg animate-fade-in">
+    <h1 class="mb-6 text-3xl font-bold brand-text text-center">Start a New Conversation</h1>
 
-<form method="post" action=".">
-    {% csrf_token %}
+    <form method="post" action="." class="space-y-6">
+        {% csrf_token %}
 
-    <div class="space-y-4">
-        {{ form.as_p }}
-    </div>
-
-    {% if form.errors or form.non_field_errors %}
-        <div class="mb-3 p-6 bg-red-100 rounded-xl">
+        <!-- Form fields with styling -->
+        <div class="space-y-4">
             {% for field in form %}
-                {{ field.errors }}
+                <div class="space-y-1">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <p class="text-red-600 text-sm">{{ field.errors|striptags }}</p>
+                    {% endif %}
+                </div>
             {% endfor %}
-
-            {{ form.non_field_errors }}
         </div>
-    {% endif %}
 
-    <button class="mt-6 py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Send</button>
-</form>
+        <!-- Non-field errors -->
+        {% if form.errors or form.non_field_errors %}
+            <div class="p-4 bg-red-100 rounded-xl border border-red-300">
+                <ul class="list-disc pl-5 space-y-1 text-red-700">
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <!-- Send button -->
+        <div class="flex justify-center">
+            <button type="submit" class="btn-primary py-4 px-10 text-lg rounded-xl font-semibold shadow-lg hover:shadow-2xl">
+                Send
+            </button>
+        </div>
+    </form>
+</div>
 {% endblock %}

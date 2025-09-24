@@ -1,19 +1,68 @@
 {% extends 'core/base.html' %}
 
-{% block content %}
-<h2 class="text-2xl font-bold mb-6 text-center">{{ title }}</h2>
+{% block title %}{{ title }}{% endblock %}
 
-<div class="flex flex-wrap gap-4 justify-center">
-    {% for item in items %}
-        <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2">
-            <a href="{% url 'item:detail' pk=item.pk %}" class="block border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-full h-auto">
-                <div class="p-2">
-                    <p class="text-center text-lg font-semibold">{{ item.name }}</p>
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <h2 class="text-4xl font-bold brand-text mb-10 text-center animate-fade-in">
+        {{ title }}
+    </h2>
+
+    <!-- Masonry Gallery -->
+    <div class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6 space-y-6 animate-fade-in">
+        {% for item in items %}
+            <button onclick="openLightbox('{{ item.image.url }}', '{% url 'item:detail' pk=item.pk %}')"
+                    class="block break-inside-avoid group relative rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
+                <img src="{{ item.image.url }}"
+                     alt="{{ item.name }}"
+                     class="w-full h-auto object-cover rounded-xl group-hover:scale-105 transition-transform duration-300" />
+                
+                <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span class="text-white text-lg font-semibold">View</span>
                 </div>
-            </a>
-        </div>
-    {% endfor %}
+            </button>
+        {% endfor %}
+    </div>
 </div>
 
+<!-- Lightbox Modal -->
+<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50 p-4">
+    <div onclick="event.stopPropagation()" class="relative max-w-4xl mx-auto">
+        <!-- Full Image -->
+        <div class="relative">
+            <img id="lightbox-img" class="rounded-xl max-h-[80vh] mx-auto object-contain" src="" alt="Full Image">
+
+            <!-- Detail Arrow Button inside the image bottom -->
+            <a id="detail-link"
+               href="#"
+               class="absolute bottom-4 right-4 bg-accent btn-accent rounded-full px-4 py-2 text-black font-semibold shadow-lg hover:bg-yellow-500 transition-all flex items-center space-x-2">
+                <span>→</span>
+            </a>
+        </div>
+
+        <!-- Close Button just below image -->
+        <div class="flex justify-center mt-2">
+            <button onclick="closeLightbox()"
+                    class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-all">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openLightbox(imgUrl, detailUrl) {
+    document.getElementById('lightbox').classList.remove('hidden');
+    document.getElementById('lightbox-img').src = imgUrl;
+    document.getElementById('detail-link').href = detailUrl;
+}
+
+// Close when clicking outside the image
+document.getElementById('lightbox').addEventListener('click', closeLightbox);
+
+function closeLightbox() {
+    document.getElementById('lightbox').classList.add('hidden');
+    document.getElementById('lightbox-img').src = '';
+}
+</script>
 {% endblock %}

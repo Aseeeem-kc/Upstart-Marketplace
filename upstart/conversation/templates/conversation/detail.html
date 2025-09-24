@@ -3,24 +3,44 @@
 {% block title %}Conversation{% endblock %}
 
 {% block content %}
-<h1 class="mb-6 text-3xl">Conversation</h1>
+<div class="max-w-4xl mx-auto space-y-6 animate-fade-in">
 
-<div class="space-y-6">
-    {% for message in conversation.messages.all %}
-        <div class="p-6 flex {% if message.created_by == request.user %}bg-blue-100{% else %}bg-gray-100{% endif %} rounded-xl">
-            <div>
-                <p class="mb-4"><strong>{{ message.created_by.username }}</strong> @ {{ message.created_at }}</p>
-                <p>{{ message.content }}</p>
+    <h1 class="mb-6 text-3xl font-bold brand-text text-center">Conversation</h1>
+
+    <!-- Messages -->
+    <div class="space-y-4 p-4 glass-subtle rounded-2xl shadow-lg max-h-[70vh] overflow-y-auto">
+        {% for message in conversation.messages.all %}
+            <div class="flex {% if message.created_by == request.user %}justify-end{% else %}justify-start{% endif %}">
+                <div class="max-w-xs px-4 py-3 rounded-2xl shadow-md
+                            {% if message.created_by == request.user %}bg-brand-100 text-slate-800{% else %}bg-gray-100 text-slate-800{% endif %}">
+                    <p class="text-sm font-semibold mb-1">
+                        <strong>{{ message.created_by.username }}</strong>
+                        <span class="text-xs text-slate-500"> @ {{ message.created_at|date:"M d, Y H:i" }}</span>
+                    </p>
+                    <p class="break-words">{{ message.content }}</p>
+                </div>
             </div>
+        {% endfor %}
+    </div>
+
+    <!-- New message form -->
+    <form method="post" action="." class="mt-6 flex items-center space-x-4">
+        {% csrf_token %}
+
+        <div class="flex-1">
+            {{ form.content }}
         </div>
-    {% endfor %}
+
+        <button type="submit" class="btn-primary py-3 px-6 rounded-xl text-lg font-semibold shadow-lg hover:shadow-2xl">
+            Send
+        </button>
+    </form>
 </div>
 
-<form method="post" action="." class="mt-6">
-    {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <button class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Send</button>
-</form>
+<!-- Tailwind styling for textarea -->
+<style>
+    textarea {
+        @apply w-full py-3 px-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-400;
+    }
+</style>
 {% endblock %}

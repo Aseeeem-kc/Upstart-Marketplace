@@ -1,10 +1,9 @@
 <!doctype html>
-
 <html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
+
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
             tailwind.config = {
@@ -54,9 +53,9 @@
                 }
             }
         </script>
-        
+
         <title>{% block title %}{% endblock %} | upstart</title>
-        
+
         <style>
             .glass-subtle {
                 backdrop-filter: blur(10px) saturate(120%);
@@ -64,54 +63,54 @@
                 background-color: rgba(255, 255, 255, 0.9);
                 border: 1px solid rgba(14, 165, 233, 0.1);
             }
-            
+
             .glass-dark-subtle {
                 backdrop-filter: blur(10px) saturate(120%);
                 -webkit-backdrop-filter: blur(10px) saturate(120%);
                 background-color: rgba(3, 105, 161, 0.95);
                 border: 1px solid rgba(14, 165, 233, 0.2);
             }
-            
+
             .brand-gradient {
                 background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 50%, #0369a1 100%);
             }
-            
+
             .accent-gradient {
                 background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
             }
-            
+
             .nav-link {
                 position: relative;
                 transition: all 0.2s ease;
             }
-            
+
             .nav-link:hover {
                 color: #0ea5e9;
                 transform: translateY(-1px);
             }
-            
+
             .btn-primary {
                 background: linear-gradient(135deg, #0ea5e9, #0284c7);
                 transition: all 0.2s ease;
             }
-            
+
             .btn-primary:hover {
                 background: linear-gradient(135deg, #0284c7, #0369a1);
                 transform: translateY(-1px);
                 box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
             }
-            
+
             .btn-accent {
                 background: linear-gradient(135deg, #facc15, #eab308);
                 transition: all 0.2s ease;
             }
-            
+
             .btn-accent:hover {
                 background: linear-gradient(135deg, #eab308, #ca8a04);
                 transform: translateY(-1px);
                 box-shadow: 0 4px 12px rgba(234, 179, 8, 0.3);
             }
-            
+
             .brand-text {
                 background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
                 -webkit-background-clip: text;
@@ -124,13 +123,13 @@
 
     <body class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
         <!-- Navigation -->
-        <nav class="sticky top-0 z-50 px-4 py-4">
-            <div class="max-w-7xl mx-auto glass-subtle rounded-2xl shadow-lg">
+        <nav class="sticky top-0 z-50 w-full px-4 py-4">
+            <div class="w-full glass-subtle">
                 <div class="flex justify-between items-center px-6 py-4">
                     <a href="/" class="text-3xl brand-text hover:scale-105 transition-transform duration-200">
                         upstart
                     </a>
-                
+
                     <div class="hidden md:flex items-center space-x-6">
                         {% if user.is_authenticated %}
                             <div class="px-4 py-2 glass-dark-subtle rounded-lg text-white">
@@ -141,23 +140,23 @@
                                 <span class="text-slate-600 font-medium">Welcome, Guest</span>
                             </div>
                         {% endif %}
-                
+
                         <a href="{% url 'item:new' %}" class="nav-link px-4 py-2 text-slate-700 font-semibold rounded-lg hover:bg-brand-50">
                             New Item
                         </a>
                         <a href="{% url 'item:items' %}" class="nav-link px-4 py-2 text-slate-700 font-semibold rounded-lg hover:bg-brand-50">
                             Browse
                         </a>
-                
+
                         {% if user.is_authenticated %}
                             <a href="{% url 'conversation:inbox' %}" class="btn-primary px-6 py-3 text-white font-semibold rounded-xl shadow-md">
                                 Inbox
                             </a>
-                
+
                             <a href="{% url 'dashboard:index' %}" class="btn-accent px-6 py-3 text-slate-800 font-semibold rounded-xl shadow-md">
                                 Dashboard
                             </a>
-                
+
                             <a href="{% url 'core:logout' %}" class="px-6 py-3 text-slate-600 font-semibold border border-slate-300 rounded-xl hover:bg-slate-100 transition-all duration-200">
                                 Logout
                             </a>
@@ -170,7 +169,7 @@
                             </a>
                         {% endif %}
                     </div>
-                    
+
                     <!-- Mobile menu button -->
                     <button class="md:hidden p-2 rounded-lg bg-brand-500 text-white" onclick="toggleMobileMenu()">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,7 +177,7 @@
                         </svg>
                     </button>
                 </div>
-                
+
                 <!-- Mobile menu -->
                 <div id="mobileMenu" class="hidden md:hidden px-6 pb-4 border-t border-brand-100 animate-slide-down">
                     <div class="flex flex-col space-y-3 pt-4">
@@ -191,10 +190,10 @@
                                 <span class="text-slate-600 font-medium">Welcome, Guest</span>
                             </div>
                         {% endif %}
-                        
+
                         <a href="{% url 'item:new' %}" class="px-4 py-3 text-slate-700 font-semibold rounded-lg hover:bg-brand-50">New Item</a>
                         <a href="{% url 'item:items' %}" class="px-4 py-3 text-slate-700 font-semibold rounded-lg hover:bg-brand-50">Browse</a>
-                        
+
                         {% if user.is_authenticated %}
                             <a href="{% url 'conversation:inbox' %}" class="btn-primary px-6 py-3 text-white font-semibold rounded-xl text-center shadow-md">Inbox</a>
                             <a href="{% url 'dashboard:index' %}" class="btn-accent px-6 py-3 text-slate-800 font-semibold rounded-xl text-center shadow-md">Dashboard</a>
@@ -209,16 +208,16 @@
         </nav>
 
         <!-- Main content -->
-        <main class="max-w-7xl mx-auto px-6 py-8">
-            <div class="glass-subtle rounded-2xl p-8 shadow-lg min-h-[60vh] animate-fade-in">
+        <main class="w-full px-6 py-8">
+            <div class="glass-subtle rounded-none p-8 shadow-lg min-h-[60vh] animate-fade-in">
                 {% block content %}
                 {% endblock %}
             </div>
         </main>
 
         <!-- Footer -->
-        <footer class="mt-16 bg-slate-800">
-            <div class="max-w-7xl mx-auto px-6 py-12">
+        <footer class="mt-16 bg-slate-800 w-full">
+            <div class="w-full px-6 py-12">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div class="lg:col-span-2">
                         <div class="flex items-center mb-6">
@@ -229,67 +228,27 @@
                         </div>
                         <h3 class="text-xl font-bold text-white mb-4">Your Trusted Marketplace</h3>
                         <p class="text-slate-300 leading-relaxed max-w-2xl">
-                            upstart connects buyers and sellers in a secure, user-friendly environment. 
-                            Discover quality products, build trust with our community, and enjoy seamless 
-                            transactions. Whether you're buying or selling, we're here to make commerce simple and reliable.
+                            upstart connects buyers and sellers in a secure, user-friendly environment.
                         </p>
-                        <div class="flex items-center space-x-6 mt-8">
-                            <div class="flex items-center text-slate-400">
-                                <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center mr-3">
-                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <span class="font-medium">Secure Transactions</span>
-                            </div>
-                            <div class="flex items-center text-slate-400">
-                                <div class="w-10 h-10 bg-accent-500 rounded-lg flex items-center justify-center mr-3">
-                                    <svg class="w-5 h-5 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                    </svg>
-                                </div>
-                                <span class="font-medium">Fast & Reliable</span>
-                            </div>
-                        </div>
                     </div>
 
                     <div>
                         <h3 class="text-xl font-bold text-white mb-6">Quick Links</h3>
                         <ul class="space-y-4">
                             <li>
-                                <a href="#" class="flex items-center text-slate-300 hover:text-brand-400 transition-colors duration-200">
-                                    <div class="w-2 h-2 bg-brand-400 rounded-full mr-3"></div>
+                                <a href="#" class="flex items-center text-slate-300 hover:text-brand-400">
                                     About Us
                                 </a>
                             </li>
                             <li>
-                                <a href="{% url 'core:contact' %}" class="flex items-center text-slate-300 hover:text-brand-400 transition-colors duration-200">
-                                    <div class="w-2 h-2 bg-brand-400 rounded-full mr-3"></div>
+                                <a href="{% url 'core:contact' %}" class="flex items-center text-slate-300 hover:text-brand-400">
                                     Contact Support
                                 </a>
                             </li>
-                            <li>
-                                <a href="#" class="flex items-center text-slate-300 hover:text-brand-400 transition-colors duration-200">
-                                    <div class="w-2 h-2 bg-brand-400 rounded-full mr-3"></div>
-                                    Privacy Policy
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="flex items-center text-slate-300 hover:text-brand-400 transition-colors duration-200">
-                                    <div class="w-2 h-2 bg-brand-400 rounded-full mr-3"></div>
-                                    Terms of Service
-                                </a>
-                            </li>
                         </ul>
-                        
-                        <div class="mt-8 p-4 bg-brand-500/10 rounded-xl border border-brand-500/20">
-                            <p class="text-sm text-slate-300 text-center">
-                                Built with care for the community
-                            </p>
-                        </div>
                     </div>
                 </div>
-                
+
                 <div class="mt-12 pt-8 border-t border-slate-700">
                     <p class="text-center text-slate-400 text-sm">
                         © 2025 upstart marketplace. All rights reserved.
@@ -297,7 +256,7 @@
                 </div>
             </div>
         </footer>
-        
+
         <script>
             function toggleMobileMenu() {
                 const menu = document.getElementById('mobileMenu');

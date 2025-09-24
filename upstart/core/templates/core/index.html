@@ -73,7 +73,6 @@
     </div>
 </div>
 {% endif %}
-
 <!-- Newest Items Section -->
 <div class="mb-12">
     <div class="p-8 lg:p-12 bg-slate-50 rounded-2xl border border-slate-200">
@@ -86,27 +85,27 @@
             </p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
             {% for item in items %}
-            <div class="group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden border border-slate-100">
+            <div class="group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden border border-slate-100 max-w-xs">
                 <a href="{% url 'item:detail' item.id %}" class="block">
-                    <div class="relative h-48 overflow-hidden">
+                    <div class="relative overflow-hidden aspect-square">
                         <img src="{{ item.image.url }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200">
-                        <div class="absolute top-3 left-3">
+                        <div class="absolute top-2 left-2">
                             <span class="bg-accent-400 text-slate-800 text-xs font-semibold px-2 py-1 rounded-full">
                                 New
                             </span>
                         </div>
                     </div>
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold text-slate-900 mb-2 group-hover:text-brand-600 transition-colors truncate">
+                    <div class="p-2">
+                        <h3 class="text-sm font-semibold text-slate-900 mb-1 group-hover:text-brand-600 transition-colors truncate">
                             {{ item.name }}
                         </h3>
                         <div class="flex items-center justify-between">
-                            <p class="text-xl font-bold text-brand-600">
+                            <p class="text-sm font-bold text-brand-600">
                                 ${{ item.price }}
                             </p>
-                            <span class="opacity-0 group-hover:opacity-100 text-brand-500 text-sm font-medium transition-opacity duration-200">
+                            <span class="opacity-0 group-hover:opacity-100 text-brand-500 text-xs font-medium transition-opacity duration-200">
                                 View Details →
                             </span>
                         </div>
@@ -117,7 +116,6 @@
         </div>
     </div>
 </div>
-
 <!-- Categories Section -->
 <div class="mb-12">
     <div class="p-8 lg:p-12 bg-white rounded-2xl border border-slate-200">
@@ -208,24 +206,5 @@
     </div>
 </div>
 
-<!-- CTA Section -->
-<div class="text-center p-8 bg-white rounded-2xl border border-slate-200">
-    <h3 class="text-2xl font-bold text-slate-800 mb-4">
-        Ready to join our marketplace?
-    </h3>
-    <p class="text-slate-600 mb-6 max-w-md mx-auto">
-        Whether you're looking to buy quality items or sell your products, upstart provides a trusted platform for your needs.
-    </p>
-    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        {% if not user.is_authenticated %}
-        <a href="{% url 'core:signup' %}" class="btn-primary px-6 py-3 text-white font-semibold rounded-xl shadow-lg">
-            Get Started
-        </a>
-        {% endif %}
-        <a href="{% url 'core:contact' %}" class="px-6 py-3 text-slate-600 font-semibold border border-slate-300 rounded-xl hover:bg-slate-50 transition-colors duration-200">
-            Contact Us
-        </a>
-    </div>
-</div>
 
 {% endblock %}

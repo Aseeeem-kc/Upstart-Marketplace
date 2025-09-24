@@ -1,0 +1,74 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Welcome{% endblock %} 
+
+{% block content %}
+{% if user.is_authenticated and recommendations %}
+  <h2 class="text-xl font-semibold mt-6">Recommended for You</h2>
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 mt-4">
+    {% for item in recommendations %}
+      <div class="rounded-lg overflow-hidden shadow-md">
+        <a href="{% url 'item:detail' item.id %}">
+          <div class="h-52 w-full">
+            <img src="{{ item.image.url }}" class="object-contain h-full w-full rounded-t-lg">
+          </div>
+          <div class="p-4 bg-white rounded-b-lg">
+            <h2 class="text-lg font-medium">{{ item.name }}</h2>
+            <p class="text-gray-500 text-sm">Price: {{ item.price }}</p>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-12 text-2xl text-center">Newest items</h2>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
+        {% for item in items %}
+            <div class="rounded-lg overflow-hidden shadow-md">
+                <a href="{% url 'item:detail' item.id %}">
+                    <div class="h-52 w-full">
+                        <img src="{{ item.image.url }}" class="object-contain h-full w-full rounded-t-lg">
+                    </div>
+
+                    <div class="p-4 bg-white rounded-b-lg">
+                        <h2 class="text-lg font-medium">{{ item.name }}</h2>
+                        <p class="text-gray-500 text-sm">Price: {{ item.price }}</p>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-12 text-2xl text-center">Categories</h2>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
+        {% for category in categories %}
+        <div class="rounded-lg overflow-hidden shadow-md">
+            <a href="{% url 'core:category_view' category.id %}">
+                <div class="p-4 bg-white rounded-lg">
+                    <h2 class="text-lg font-medium">{{ category.name }}</h2>
+                    <p class="text-gray-500 text-sm">{{ category.items.count }} items</p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl text-center flex flex-col items-center">
+    <div class="flex flex-wrap gap-4 mb-6">
+        {% for item in items %}
+            {% if item.image %}
+                <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-48 h-48 object-cover rounded-lg">
+            {% endif %}
+        {% endfor %}
+    </div>
+    <a href="{% url 'item:gallery' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700 mt-4">View Image Gallery</a>
+</div>
+
+{% endblock %}

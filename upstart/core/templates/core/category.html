@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block content %}
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h1 class="text-3xl font-semibold text-center mb-8">Category: {{ category.name }}</h1>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for item in items %}
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <a href="{% url 'item:detail' item.id %}" class="block">
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-full h-80 object-contain rounded-t-xl">
+                    <div class="p-4">
+                        <h2 class="text-xl font-semibold">{{ item.name }}</h2>
+                        <p class="text-gray-600 mt-2">Price: {{ item.price }}</p>
+                    </div>
+                </a>
+            </div>
+        {% empty %}
+            <p class="text-center text-gray-500">No products available in this category.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

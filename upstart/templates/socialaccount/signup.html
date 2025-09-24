@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+{% load socialaccount %}
+{% block title %}Sign Up{% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
+    <h1 class="mb-6 text-3xl">Sign Up</h1>
+
+    <form method="post" action=".">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="inline-block mb-2">Email</label><br>
+            <input type="email" name="email" placeholder="Your email" class="w-full py-4 px-6 rounded-xl" required />
+        </div>
+        
+        <!-- Other form fields for the signup, e.g., password, etc. -->
+        <!-- Depending on your form structure, you can include username, password fields here -->
+        
+        <div class="flex items-center gap-4 mb-6">
+            <button type="submit" class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white flex items-center">
+                Sign Up
+            </button>
+            
+            <span class="text-gray-500 text-xl pl-4">OR</span>
+            
+            <!-- Google Login Button -->
+            <a href="{% provider_login_url 'google' %}" class="py-4 px-4 text-lg hover:bg-gray-300 rounded-xl text-black flex items-center gap-2">
+                <img src="{% static 'images/google-logo.svg' %}" alt="Google logo" class="w-5 h-5"/>
+                <span>Sign Up with Google</span>
+            </a>
+        </div>
+    </form>
+
+    {% if form.errors %}
+        <div class="mb-3 p-6 bg-red-100 rounded-xl">
+            <p class="text-red-700">{{ form.email.errors }}</p>
+            <p class="text-red-700">An account with this email already exists. Please <a href="{% url 'account_login' %}" class="underline hover:text-blue-700">log in</a> to connect your Google account.</p>
+        </div>
+    {% endif %}
+
+    <p class="text-blue-500 mb-4">Already have an account? Log in <a href="{% url 'account_login' %}" class="underline hover:text-blue-700">here</a></p>
+</div>
+{% endblock %}

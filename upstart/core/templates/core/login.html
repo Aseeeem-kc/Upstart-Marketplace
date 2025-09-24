@@ -1,0 +1,60 @@
+{% extends 'core/base.html' %}
+{% load socialaccount %}
+{% block title %}Log in{% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
+    {% comment %} {% if messages %}
+    <ul class="mb-3 p-6 bg-red-100 rounded-xl">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul> 
+    {% endif %} {% endcomment %}
+    <h1 class="mb-6 text-3xl">Log in</h1>
+
+    <form method="post" action=".">
+        {% csrf_token %} 
+        {% if not form.user.is_active %}
+        <div class="mb-3 p-6 bg-red-100 rounded-xl">
+            <p>Note: You need to activate your Account before logging in.</p>
+        </div>
+        {% endif %}
+        <div class="mb-3">
+            <label class="inline-block mb-2">Username</label><br>
+            <input type="text" name="username" placeholder="Your username" class="w-full py-4 px-6 rounded-xl" />
+        </div>
+        <div class="mb-3">
+            <label class="inline-block mb-2">Password</label><br>
+            <input type="password" name="password" placeholder="Your password" class="w-full py-4 px-6 rounded-xl" />
+        </div>
+
+        {% if form.errors or form.non_field_errors %}
+        <div class="mb-3 p-6 bg-red-100 rounded-xl">
+            {% for field in form %}
+                {{ field.errors }}
+            {% endfor %}
+            
+            {{ form.non_field_errors }}
+        </div>
+        {% else %}
+        <p class="text-blue-500 mb-4">Don't have an account? Sign up <a href="{% url 'core:signup' %}" class="underline hover:text-blue-700">here</a></p>
+        {% endif %}
+
+        <div class="flex items-center gap-4 mb-6">
+            <button class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white flex items-center">
+                Submit
+            </button>
+            
+            <span class="text-gray-500 text-xl pl-4">OR</span>
+            
+            <!-- Google Login Button -->
+            <a href="{% provider_login_url 'google' %}" class="py-4 px-4 text-lg hover:bg-gray-300 rounded-xl text-black flex items-center gap-2">
+                <img src="{% static 'images/google-logo.svg' %}" alt="Google logo" class="w-5 h-5"/>
+                <span>Proceed with Google</span>
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

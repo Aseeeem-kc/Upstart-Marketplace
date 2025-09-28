@@ -53,8 +53,22 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google'
+    'allauth.socialaccount.providers.google',
+
+    # websockets -> channels
+    "channels"
 ]
+
+
+ASGI_APPLICATION = "upstart.asgi.application"
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -199,3 +213,4 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 ACCOUNT_FORMS = {
     'signup': 'core.forms.CustomSignupForm',
 }
+

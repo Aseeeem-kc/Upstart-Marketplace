@@ -8,7 +8,7 @@
     <h1 class="mb-6 text-3xl font-bold brand-text text-center">Conversation</h1>
 
     <!-- Messages -->
-    <div class="space-y-4 p-4 glass-subtle rounded-2xl shadow-lg max-h-[70vh] overflow-y-auto">
+    <div id="chat-log" class="space-y-4 p-4 glass-subtle rounded-2xl shadow-lg max-h-[70vh] overflow-y-auto">
         {% for message in conversation.messages.all %}
             <div class="flex {% if message.created_by == request.user %}justify-end{% else %}justify-start{% endif %}">
                 <div class="max-w-xs px-4 py-3 rounded-2xl shadow-md
@@ -23,24 +23,71 @@
         {% endfor %}
     </div>
 
-    <!-- New message form -->
-    <form method="post" action="." class="mt-6 flex items-center space-x-4">
-        {% csrf_token %}
-
-        <div class="flex-1">
-            {{ form.content }}
-        </div>
-
-        <button type="submit" class="btn-primary py-3 px-6 rounded-xl text-lg font-semibold shadow-lg hover:shadow-2xl">
+    <!-- New message input -->
+    <div class="mt-6 flex items-center space-x-4">
+        <textarea id="chat-message-input" rows="2" placeholder="Type your message..."
+                  class="flex-1 w-full py-3 px-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-400"></textarea>
+        <button id="chat-message-submit" type="button"
+                class="btn-primary py-3 px-6 rounded-xl text-lg font-semibold shadow-lg hover:shadow-2xl">
             Send
         </button>
-    </form>
+    </div>
 </div>
 
-<!-- Tailwind styling for textarea -->
-<style>
-    textarea {
-        @apply w-full py-3 px-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-400;
-    }
-</style>
+<script>
+    const conversationId = "{{ conversation.id }}";
+    const username = "{{ request.user.username }}";
+
+    const chatLog = document.getElementById("chat-log");
+    const messageInput = document.getElementById("chat-message-input");
+    const messageButton = document.getElementById("chat-message-submit");
+
+    const chatSocket = new WebSocket(
+        "ws://" + window.location.host +
+        "/ws/conversation/" + conversationId + "/"
+    );
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+
+        const isSelf = data.username === username;
+        const messageHtml = `
+            <div class="flex ${isSelf ? "justify-end" : "justify-start"}">
+                <div class="max-w-xs px-4 py-3 rounded-2xl shadow-md ${isSelf ? "bg-brand-100 text-slate-800" : "bg-gray-100 text-slate-800"}">
+                    <p class="text-sm font-semibold mb-1">
+                        <strong>${data.username}</strong>
+                        <span class="text-xs text-slate-500"> @ ${data.timestamp}</span>
+                    </p>
+                    <p class="break-words">${data.message}</p>
+                </div>
+            </div>
+        `;
+
+        chatLog.innerHTML += messageHtml;
+        chatLog.scrollTop = chatLog.scrollHeight; // scroll to bottom
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error("Chat socket closed unexpectedly");
+    };
+
+    messageButton.onclick = function(e) {
+        const message = messageInput.value.trim();
+        if (message.length === 0) return;
+
+        chatSocket.send(JSON.stringify({
+            "message": message,
+            "username": username
+        }));
+
+        messageInput.value = "";
+    };
+
+    messageInput.addEventListener("keyup", function(e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            messageButton.click();
+        }
+    });
+</script>
 {% endblock %}

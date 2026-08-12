@@ -1,3 +1,5 @@
+
+
 # Upstart 🛒
 
 [![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com/)
@@ -93,6 +95,8 @@ graph TD
    ```env
    DEBUG=True
    SECRET_KEY=your-django-secret-key
+   EMAIL_HOST=smtp.gmail.com
+   EMAIL_USE_TLS=True
    EMAIL_HOST_USER=your-email@gmail.com
    EMAIL_HOST_PASSWORD=your-app-password
    ```
